@@ -709,31 +709,144 @@
         }
 
         function renderMessages(messages) {
-            const messagesArea = document.getElementById('messagesArea');
-            const existingMessages = messagesArea.querySelectorAll('.message');
-            existingMessages.forEach(msg => msg.remove());
+    const messagesArea = document.getElementById('messagesArea');
+    const existingMessages = messagesArea.querySelectorAll('.message');
+    existingMessages.forEach(msg => msg.remove());
 
-            messages.forEach(msg => {
-                const char = characters[msg.char];
-                if (!char) return;
-                
-                const messageDiv = document.createElement('div');
-                messageDiv.className = `message ${msg.char}`;
-                messageDiv.innerHTML = `
-                    <div class="speaker">
-                        ${char.name}
-                        <span class="timestamp">${formatTimestamp(msg.timestamp)}</span>
-                    </div>
-                    <div class="message-content">${msg.text}</div>
-                `;
-                messagesArea.appendChild(messageDiv);
-            });
+    messages.forEach(msg => {
+        const char = characters[msg.char];
+        if (!char) return;
+        
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${msg.char}`;
+        messageDiv.style.cursor = 'pointer';
+        messageDiv.innerHTML = `
+            <div class="speaker">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <div style="
+                        width: 20px;
+                        height: 20px;
+                        background: ${char.color};
+                        color: #000;
+                        border: 1px solid ${char.color};
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 12px;
+                        font-weight: bold;
+                    ">${char.name[0]}</div>
+                    ${char.name}
+                </div>
+                <span class="timestamp">${formatTimestamp(msg.timestamp)}</span>
+            </div>
+            <div class="message-content">${msg.text}</div>
+        `;
+        
+        // Add hover event for stats modal
+        messageDiv.addEventListener('mouseenter', function(e) {
+            showMessageStats(msg.char, e);
+        });
+        
+        messageDiv.addEventListener('mousemove', function(e) {
+            updateMessageStatsPosition(e);
+        });
+        
+        messageDiv.addEventListener('mouseleave', function() {
+            hideMessageStats();
+        });
+        
+        messagesArea.appendChild(messageDiv);
+    });
 
-            document.getElementById('messageCount').textContent = allMessages.length;
-            document.getElementById('userCount').textContent = Math.floor(Math.random() * 8) + 3;
-            messagesArea.scrollTop = messagesArea.scrollHeight;
-        }
+    document.getElementById('messageCount').textContent = allMessages.length;
+    document.getElementById('userCount').textContent = Math.floor(Math.random() * 8) + 3;
+    messagesArea.scrollTop = messagesArea.scrollHeight;
+}
 
+        function showMessageStats(charKey, e) {
+    const char = characters[charKey];
+    const charStats = stats[charKey] || { messages: 0, influence: 0, active: false, lastActive: null };
+    
+    let modal = document.getElementById('messageStatsModal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'messageStatsModal';
+        modal.style.cssText = `
+            position: fixed;
+            background: rgba(0, 0, 0, 0.95);
+            border: 2px solid ${char.color};
+            padding: 15px;
+            border-radius: 4px;
+            z-index: 10001;
+            min-width: 250px;
+            pointer-events: none;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9);
+        `;
+        document.body.appendChild(modal);
+    }
+    
+    modal.style.borderColor = char.color;
+    modal.style.display = 'block';
+    modal.innerHTML = `
+        <div style="
+            width: 40px;
+            height: 40px;
+            background: ${char.color};
+            color: #000;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+            margin: 0 auto 12px;
+        ">${char.name[0]}</div>
+        <div style="
+            color: ${char.color};
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            text-align: center;
+            letter-spacing: 1px;
+        ">${char.name} STATISTICS</div>
+        <div style="font-size: 12px; line-height: 1.8;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                <span style="color: #888;">Messages Sent:</span>
+                <span style="color: #00ff00; font-weight: bold;">${charStats.messages}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                <span style="color: #888;">Influence Level:</span>
+                <span style="color: #00ff00; font-weight: bold;">${charStats.influence}%</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                <span style="color: #888;">Neural Activity:</span>
+                <span style="color: ${charStats.active ? '#00ff00' : '#ff0000'}; font-weight: bold;">${charStats.active ? 'Active' : 'Idle'}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+                <span style="color: #888;">Last Active:</span>
+                <span style="color: #00ff00; font-weight: bold;">${formatTime(charStats.lastActive)}</span>
+            </div>
+        </div>
+    `;
+    
+    updateMessageStatsPosition(e);
+}
+
+function updateMessageStatsPosition(e) {
+    const modal = document.getElementById('messageStatsModal');
+    if (modal && modal.style.display === 'block') {
+        modal.style.left = `${e.clientX + 15}px`;
+        modal.style.top = `${e.clientY + 15}px`;
+    }
+}
+
+function hideMessageStats() {
+    const modal = document.getElementById('messageStatsModal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+        
         let generationStarted = false;
         function startAutoGeneration() {
             if (generationStarted) return;
