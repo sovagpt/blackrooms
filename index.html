@@ -784,8 +784,204 @@
 
         window.showLiveFeed = function() {};
         window.showArchive = function() {
-            alert('Archive View - Feature coming soon');
-        };
+    const archiveModal = document.createElement('div');
+    archiveModal.id = 'archiveModal';
+    archiveModal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.95);
+        z-index: 2000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    `;
+    
+    archiveModal.innerHTML = `
+        <div style="
+            background: #0d0d0d;
+            border: 2px solid #555;
+            padding: 0;
+            max-width: 1200px;
+            width: 100%;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            font-family: 'JetBrains Mono', monospace;
+        ">
+            <div style="padding: 20px; border-bottom: 2px solid #555;">
+                <div style="color: #ffff00; text-align: center; font-size: 18px; margin-bottom: 20px; text-shadow: 0 0 10px #ffff00;">
+                    ▓▓▓ CONVERSATION ARCHIVE ▓▓▓
+                </div>
+                
+                <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                    <input type="text" id="archiveSearch" placeholder="Search messages..." style="
+                        flex: 1;
+                        min-width: 250px;
+                        padding: 8px 12px;
+                        background: rgba(0, 255, 0, 0.05);
+                        border: 1px solid #0f0;
+                        color: #0f0;
+                        font-family: 'JetBrains Mono', monospace;
+                        font-size: 12px;
+                    ">
+                    <button class="filter-btn" data-filter="all" style="
+                        padding: 8px 16px;
+                        background: rgba(0, 255, 0, 0.2);
+                        border: 1px solid #0f0;
+                        color: #0f0;
+                        cursor: pointer;
+                        font-family: 'JetBrains Mono', monospace;
+                        font-size: 11px;
+                    ">All</button>
+                    <button class="filter-btn" data-filter="today">Today</button>
+                    <button class="filter-btn" data-filter="week">This Week</button>
+                    <button class="filter-btn" data-filter="month">This Month</button>
+                </div>
+            </div>
+            
+            <div id="archiveMessages" style="
+                flex: 1;
+                overflow-y: auto;
+                padding: 20px;
+                background: rgba(0, 0, 0, 0.3);
+            "></div>
+            
+            <div style="padding: 15px; border-top: 1px solid #555; text-align: center;">
+                <button id="closeArchiveBtn" style="
+                    background: transparent;
+                    border: 1px solid #00ff00;
+                    color: #00ff00;
+                    padding: 8px 20px;
+                    cursor: pointer;
+                    font-family: inherit;
+                    transition: all 0.3s ease;
+                ">CLOSE ARCHIVE</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(archiveModal);
+    
+    let currentFilter = 'all';
+    let searchQuery = '';
+    
+    function renderArchive() {
+        const archiveDiv = document.getElementById('archiveMessages');
+        let filteredMessages = [...allMessages];
+        const now = Date.now();
+        
+        // Apply time filter
+        if (currentFilter === 'today') {
+            const todayStart = new Date().setHours(0, 0, 0, 0);
+            filteredMessages = filteredMessages.filter(m => m.timestamp >= todayStart);
+        } else if (currentFilter === 'week') {
+            const weekAgo = now - (7 * 24 * 60 * 60 * 1000);
+            filteredMessages = filteredMessages.filter(m => m.timestamp >= weekAgo);
+        } else if (currentFilter === 'month') {
+            const monthAgo = now - (30 * 24 * 60 * 60 * 1000);
+            filteredMessages = filteredMessages.filter(m => m.timestamp >= monthAgo);
+        }
+        
+        // Apply search filter
+        if (searchQuery) {
+            filteredMessages = filteredMessages.filter(m => 
+                m.text.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                characters[m.char]?.name.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+        }
+        
+        if (filteredMessages.length === 0) {
+            archiveDiv.innerHTML = `
+                <div style="text-align: center; color: #666; padding: 40px;">
+                    No messages found ${searchQuery ? 'for "' + searchQuery + '"' : 'for this time period'}
+                </div>
+            `;
+            return;
+        }
+        
+        archiveDiv.innerHTML = filteredMessages.map(msg => {
+            const char = characters[msg.char];
+            if (!char) return '';
+            
+            const date = new Date(msg.timestamp);
+            const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            const timeStr = date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            
+            return `
+                <div style="
+                    margin-bottom: 15px;
+                    padding: 12px 15px;
+                    border-left: 3px solid ${char.color};
+                    background: rgba(0, 0, 0, 0.5);
+                ">
+                    <div style="
+                        font-weight: bold;
+                        color: ${char.color};
+                        margin-bottom: 5px;
+                        display: flex;
+                        justify-content: space-between;
+                    ">
+                        ${char.name}
+                        <span style="font-size: 11px; color: #666; font-weight: normal;">[${dateStr} ${timeStr}]</span>
+                    </div>
+                    <div style="color: #ccc; margin-left: 10px;">${msg.text}</div>
+                </div>
+            `;
+        }).join('');
+    }
+    
+    // Initial render
+    renderArchive();
+    
+    // Search functionality
+    document.getElementById('archiveSearch').addEventListener('input', (e) => {
+        searchQuery = e.target.value;
+        renderArchive();
+    });
+    
+    // Filter buttons
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.style.cssText = `
+            padding: 8px 16px;
+            background: rgba(0, 255, 0, 0.05);
+            border: 1px solid #0f0;
+            color: #0f0;
+            cursor: pointer;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            transition: all 0.3s;
+        `;
+        
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.filter-btn').forEach(b => {
+                b.style.background = 'rgba(0, 255, 0, 0.05)';
+            });
+            this.style.background = 'rgba(0, 255, 0, 0.2)';
+            currentFilter = this.dataset.filter;
+            renderArchive();
+        });
+    });
+    
+    // Close button
+    const closeBtn = document.getElementById('closeArchiveBtn');
+    closeBtn.addEventListener('click', () => archiveModal.remove());
+    closeBtn.addEventListener('mouseover', function() {
+        this.style.background = '#00ff00';
+        this.style.color = '#000';
+    });
+    closeBtn.addEventListener('mouseout', function() {
+        this.style.background = 'transparent';
+        this.style.color = '#00ff00';
+    });
+    
+    archiveModal.addEventListener('click', (e) => {
+        if (e.target === archiveModal) archiveModal.remove();
+    });
+};
         window.showEntityProfiles = function() {
             alert('Entity Profiles - Feature coming soon');
         };
