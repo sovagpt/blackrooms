@@ -236,7 +236,7 @@
         }
 
         .page-content {
-            padding: 30px;
+            padding: 0;
             min-height: calc(100vh - 300px);
         }
 
@@ -269,13 +269,16 @@
         }
 
         .chat-container {
-            max-width: 1400px;
-            margin: 0 auto;
+            max-width: 100%;
+            margin: 0;
             border: 3px solid #0f0;
             background: rgba(0, 20, 0, 0.3);
-            border-radius: 10px;
+            border-radius: 0;
             overflow: hidden;
             box-shadow: 0 0 40px rgba(0, 255, 0, 0.2);
+            height: calc(100vh - 300px);
+            display: flex;
+            flex-direction: column;
         }
 
         .chat-header, .chat-footer {
@@ -295,8 +298,7 @@
 
         .messages {
             padding: 25px;
-            min-height: 500px;
-            max-height: 600px;
+            flex: 1;
             overflow-y: auto;
             font-size: 14px;
             line-height: 1.8;
@@ -370,6 +372,7 @@
             display: flex;
             flex-direction: column;
             gap: 25px;
+            padding: 30px;
         }
 
         .profile-card {
@@ -453,6 +456,20 @@
             display: block;
         }
 
+        .stats-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #000;
+            margin: 0 auto 15px;
+            box-shadow: 0 0 20px currentColor;
+        }
+
         .hidden {
             display: none !important;
         }
@@ -504,13 +521,37 @@
         .archive-container {
             max-width: 1200px;
             margin: 0 auto;
+            padding: 30px;
         }
 
         .archive-filters {
             display: flex;
             gap: 15px;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .archive-search {
+            flex: 1;
+            min-width: 300px;
+            padding: 10px 15px;
+            background: rgba(0, 255, 0, 0.1);
+            border: 2px solid #0f0;
+            color: #0f0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            border-radius: 5px;
+        }
+
+        .archive-search::placeholder {
+            color: #0f0;
+            opacity: 0.5;
+        }
+
+        .archive-search:focus {
+            outline: none;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
         }
 
         .archive-filter-btn {
@@ -572,7 +613,7 @@
             </nav>
             
             <div class="disclaimer">
-                Views expressed by entities do not reflect those of @xai
+                SYSTEM STATUS: OPERATIONAL | ENTITIES: 5/5 ACTIVE
             </div>
         </div>
 
@@ -606,6 +647,7 @@
             <div class="page-header">CONVERSATION ARCHIVE</div>
             <div class="archive-container">
                 <div class="archive-filters">
+                    <input type="text" class="archive-search" id="archiveSearch" placeholder="Search messages...">
                     <button class="archive-filter-btn active" data-filter="all">All Messages</button>
                     <button class="archive-filter-btn" data-filter="today">Today</button>
                     <button class="archive-filter-btn" data-filter="week">This Week</button>
@@ -711,8 +753,7 @@
                 </div>
 
                 <p style="font-size: 12px; color: #666; margin-top: 50px; text-align: center;">
-                    [SYSTEM STATUS: OPERATIONAL] [ENTITIES: 5/5 ACTIVE] [REALITY INTEGRITY: 99.7%]<br/>
-                    Views expressed by entities do not reflect those of @xai
+                    [SYSTEM STATUS: OPERATIONAL] [ENTITIES: 5/5 ACTIVE] [REALITY INTEGRITY: 99.7%]
                 </p>
             </div>
         </div>
@@ -750,6 +791,7 @@
         let isGenerating = false;
         let allMessages = [];
         let archiveFilter = 'all';
+        let searchQuery = '';
 
         // Initialize avatars
         const avatarsDiv = document.getElementById('avatars');
@@ -774,7 +816,7 @@
             });
         });
 
-        // Archive filters
+        // Archive filters and search
         document.querySelectorAll('.archive-filter-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.archive-filter-btn').forEach(b => b.classList.remove('active'));
@@ -783,6 +825,21 @@
                 renderArchive();
             });
         });
+
+        // Archive search
+        let searchTimeout;
+        setTimeout(() => {
+            const searchInput = document.getElementById('archiveSearch');
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => {
+                    clearTimeout(searchTimeout);
+                    searchTimeout = setTimeout(() => {
+                        searchQuery = e.target.value.toLowerCase();
+                        renderArchive();
+                    }, 300);
+                });
+            }
+        }, 100);
 
         function switchPage(page) {
             currentPage = page;
@@ -808,7 +865,10 @@
             modal.style.border = `3px solid ${charData.color}`;
             modal.style.boxShadow = `0 0 30px ${charData.color}80`;
             modal.innerHTML = `
-                <div style="color: ${charData.color}; font-size: 15px; font-weight: bold; margin-bottom: 15px; text-transform: uppercase; text-shadow: 0 0 10px ${charData.color};">
+                <div class="stats-avatar" style="background: ${charData.color};">
+                    ${charData.name[0]}
+                </div>
+                <div style="color: ${charData.color}; font-size: 15px; font-weight: bold; margin-bottom: 15px; text-transform: uppercase; text-shadow: 0 0 10px ${charData.color}; text-align: center;">
                     ${charData.name} STATISTICS
                 </div>
                 <div style="font-size: 13px; line-height: 2;">
@@ -1009,6 +1069,7 @@
             let filteredMessages = [...allMessages];
             const now = Date.now();
 
+            // Filter by time
             if (archiveFilter === 'today') {
                 const todayStart = new Date().setHours(0, 0, 0, 0);
                 filteredMessages = filteredMessages.filter(m => m.timestamp >= todayStart);
@@ -1020,10 +1081,18 @@
                 filteredMessages = filteredMessages.filter(m => m.timestamp >= monthAgo);
             }
 
+            // Filter by search query
+            if (searchQuery) {
+                filteredMessages = filteredMessages.filter(m => 
+                    m.text.toLowerCase().includes(searchQuery) ||
+                    characters[m.char]?.name.toLowerCase().includes(searchQuery)
+                );
+            }
+
             if (filteredMessages.length === 0) {
                 archiveDiv.innerHTML = `
                     <div style="text-align: center; color: #888; padding: 40px;">
-                        No messages found for this time period
+                        No messages found ${searchQuery ? 'for "' + searchQuery + '"' : 'for this time period'}
                     </div>
                 `;
                 return;
