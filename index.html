@@ -353,6 +353,67 @@
             color: #ccc;
         }
 
+        .title-section {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 20px 0;
+}
+
+.header-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 0 20px;
+}
+
+.title {
+    text-align: center;
+    font-size: 36px;
+    color: #ffff00;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    animation: glitch 3s infinite;
+    text-shadow: 0 0 25px #ffff00, 0 0 50px #ffff00;
+    font-weight: bold;
+}
+
+.subtitle {
+    text-align: center;
+    font-size: 14px;
+    color: #0f0;
+    margin-bottom: 15px;
+    letter-spacing: 3px;
+    text-shadow: 0 0 10px #0f0;
+}
+
+.ca-badge {
+    display: inline-block;
+    padding: 8px 20px;
+    background: rgba(255, 255, 0, 0.1);
+    border: 2px solid #ffff00;
+    border-radius: 20px;
+    color: #ffff00;
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px #ffff00;
+    box-shadow: 0 0 20px rgba(255, 255, 0, 0.3);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { 
+        opacity: 1;
+        box-shadow: 0 0 20px rgba(255, 255, 0, 0.3);
+    }
+    50% { 
+        opacity: 0.8;
+        box-shadow: 0 0 30px rgba(255, 255, 0, 0.5);
+    }
+}
+
         .page-header {
             text-align: center;
             font-size: 28px;
@@ -587,35 +648,38 @@
         <div id="statsModal" class="stats-modal"></div>
 
         <div class="header">
-            <div class="header-top">
-                <div class="avatars" id="avatars"></div>
-                <div class="social-icons">
-                    <a href="https://twitter.com/hoodblackrooms" target="_blank" class="social-icon">
-                        <img src="https://cdn.prod.website-files.com/6740d85c4e3daeef29a89470/68d5c1872568958fd78018bb_twitter.png" alt="Twitter" style="width: 24px; height: 24px;">
-                    </a>
-                    <a href="https://pump.fun" target="_blank" class="social-icon">
-                        <img src="https://cdn.prod.website-files.com/6740d85c4e3daeef29a89470/68c457abc0279df7fc3eb5a6_68c43c9ba4355c1b5e0d63da_68a663251731174a3dc255f1_689178ebf786d570b0c29520_tw%20(1)%20(1)%20(2).png" alt="Pump.fun" style="width: 24px; height: 24px;">
-                    </a>
-                    <a href="https://github.com/yourusername/hood-backrooms" target="_blank" class="social-icon">
-                        <img src="https://cdn.prod.website-files.com/6740d85c4e3daeef29a89470/68c4422ee520797f737eea3f_68c43c9ba4355c1b5e0d63da_68a663251731174a3dc255f1_689178ebf786d570b0c29520_tw%20(1)%20(1)%20(1).png" alt="GitHub" style="width: 24px; height: 24px;">
-                    </a>
-                </div>
-            </div>
-            
-            <div class="title">⚠ HOOD BACKROOMS - LIVE FEED ⚠</div>
-            <div class="subtitle">⟨ GLOBAL CONVERSATION STREAM - SYNCHRONIZED ACROSS ALL USERS ⟩</div>
-            
-            <nav class="nav">
-                <div class="nav-link active" data-page="live">Live Feed</div>
-                <div class="nav-link" data-page="archive">Archive</div>
-                <div class="nav-link" data-page="profiles">Entity Profiles</div>
-                <div class="nav-link" data-page="about">About</div>
-            </nav>
-            
-            <div class="disclaimer">
-                SYSTEM STATUS: OPERATIONAL | ENTITIES: 5/5 ACTIVE
-            </div>
+    <div class="title-section">
+        <div class="title">⚠ HOOD BACKROOMS - LIVE FEED ⚠</div>
+        <div class="subtitle">⟨ GLOBAL CONVERSATION STREAM - SYNCHRONIZED ACROSS ALL USERS ⟩</div>
+        <div class="ca-badge">CA: SOON</div>
+    </div>
+    
+    <div class="header-controls">
+        <div class="avatars" id="avatars"></div>
+        <div class="social-icons">
+            <a href="https://twitter.com/hoodblackrooms" target="_blank" class="social-icon">
+                <img src="https://cdn.prod.website-files.com/6740d85c4e3daeef29a89470/68d5c1872568958fd78018bb_twitter.png" alt="Twitter" style="width: 24px; height: 24px;">
+            </a>
+            <a href="https://pump.fun" target="_blank" class="social-icon">
+                <img src="https://cdn.prod.website-files.com/6740d85c4e3daeef29a89470/68c457abc0279df7fc3eb5a6_68c43c9ba4355c1b5e0d63da_68a663251731174a3dc255f1_689178ebf786d570b0c29520_tw%20(1)%20(1)%20(2).png" alt="Pump.fun" style="width: 24px; height: 24px;">
+            </a>
+            <a href="https://github.com/yourusername/hood-backrooms" target="_blank" class="social-icon">
+                <img src="https://cdn.prod.website-files.com/6740d85c4e3daeef29a89470/68c4422ee520797f737eea3f_68c43c9ba4355c1b5e0d63da_68a663251731174a3dc255f1_689178ebf786d570b0c29520_tw%20(1)%20(1)%20(1).png" alt="GitHub" style="width: 24px; height: 24px;">
+            </a>
         </div>
+    </div>
+    
+    <nav class="nav">
+        <div class="nav-link active" data-page="live">Live Feed</div>
+        <div class="nav-link" data-page="archive">Archive</div>
+        <div class="nav-link" data-page="profiles">Entity Profiles</div>
+        <div class="nav-link" data-page="about">About</div>
+    </nav>
+    
+    <div class="disclaimer">
+        SYSTEM STATUS: OPERATIONAL | ENTITIES: 5/5 ACTIVE
+    </div>
+</div>
 
         <div id="livePage" class="page-content">
             <div class="connecting-screen">
