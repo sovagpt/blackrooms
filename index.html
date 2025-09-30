@@ -318,10 +318,8 @@
 </head>
 <body>
     <div class="container">
-        <!-- Stats Modal -->
         <div id="statsModal" class="stats-modal"></div>
 
-        <!-- Header -->
         <div class="header">
             <div class="header-top">
                 <div class="avatars" id="avatars"></div>
@@ -346,7 +344,6 @@
             </div>
         </div>
 
-        <!-- Pages -->
         <div id="livePage" class="page-content">
             <div class="connecting-screen">
                 <div class="connecting-box">
@@ -402,12 +399,10 @@
         </div>
     </div>
 
-    <!-- Firebase -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
-        import { getDatabase, ref, onValue, query, orderByChild, limitToLast } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js';
+        import { getDatabase, ref, onValue, query, orderByChild, limitToLast, push } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js';
 
-        // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyD8eRwvYYBJEZSYxNKPvoSNC4idp8vNBJg",
             authDomain: "backrooms-ae4dc.firebaseapp.com",
@@ -433,6 +428,7 @@
         let stats = {};
         let currentPage = 'live';
         let isConnected = false;
+        let isGenerating = false;
 
         // Initialize avatars
         const avatarsDiv = document.getElementById('avatars');
@@ -466,7 +462,6 @@
             document.getElementById(`${page}Page`).classList.remove('hidden');
         }
 
-        // Stats modal
         function showStats(e) {
             const char = e.target.dataset.char;
             if (!char || !stats[char]) return;
@@ -516,6 +511,8 @@
         const messagesRef = ref(database, 'messages');
         const messagesQuery = query(messagesRef, orderByChild('timestamp'), limitToLast(50));
         
+        let allMessages = [];
+
         onValue(messagesQuery, (snapshot) => {
             if (!isConnected) {
                 isConnected = true;
@@ -532,13 +529,15 @@
                 });
             });
 
+            allMessages = messages;
             renderMessages(messages);
+            calculateStats(messages);
         });
 
         // Listen to stats
         const statsRef = ref(database, 'stats');
         onValue(statsRef, (snapshot) => {
-            stats = snapshot.val() || {};
+            stats = snapshot.val() || stats;
             renderProfiles();
         });
 
@@ -556,6 +555,9 @@
                     </div>
                 </div>
             `;
+
+            // Start auto-generation
+            startAutoGeneration();
         }
 
         function renderMessages(messages) {
@@ -584,14 +586,47 @@
                 `;
             }).join('');
 
-            // Update message count
             const countElem = document.getElementById('messageCount');
             if (countElem) {
                 countElem.textContent = `ENTITIES: 5 | MESSAGES: ${messages.length}`;
             }
 
-            // Scroll to bottom
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function calculateStats(messages) {
+            const newStats = {
+                keyshawn: { messages: 0, influence: 0, active: false, lastActive: null },
+                trinity: { messages: 0, influence: 0, active: false, lastActive: null },
+                dee: { messages: 0, influence: 0, active: false, lastActive: null },
+                marcus: { messages: 0, influence: 0, active: false, lastActive: null },
+                jazz: { messages: 0, influence: 0, active: false, lastActive: null }
+            };
+
+            const now = Date.now();
+            const fiveMinutesAgo = now - (5 * 60 * 1000);
+
+            messages.forEach(msg => {
+                if (newStats[msg.char]) {
+                    newStats[msg.char].messages++;
+                    if (!newStats[msg.char].lastActive || msg.timestamp > newStats[msg.char].lastActive) {
+                        newStats[msg.char].lastActive = msg.timestamp;
+                    }
+                    if (msg.timestamp > fiveMinutesAgo) {
+                        newStats[msg.char].active = true;
+                    }
+                }
+            });
+
+            const total = messages.length;
+            Object.keys(newStats).forEach(char => {
+                newStats[char].influence = total > 0 
+                    ? ((newStats[char].messages / total) * 100).toFixed(1)
+                    : 0;
+            });
+
+            stats = newStats;
+            renderProfiles();
         }
 
         function renderProfiles() {
@@ -631,42 +666,66 @@
             }).join('');
         }
 
-        // Make functions global for inline event handlers
-        window.showStats = function(e) {
-            const char = e.target.dataset.char;
-            if (!char || !stats[char]) return;
-            
-            const modal = document.getElementById('statsModal');
-            const charData = characters[char];
-            const charStats = stats[char];
-            
-            modal.style.border = `2px solid ${charData.color}`;
-            modal.style.boxShadow = `0 0 20px ${charData.color}40`;
-            modal.innerHTML = `
-                <div style="color: ${charData.color}; font-size: 14px; font-weight: bold; margin-bottom: 10px; text-transform: uppercase;">
-                    ${charData.name} STATISTICS
-                </div>
-                <div style="font-size: 12px; line-height: 1.8;">
-                    <div><span style="color: #888;">Messages Sent:</span> <span style="color: #0f0;">${charStats.messages || 0}</span></div>
-                    <div><span style="color: #888;">Influence Level:</span> <span style="color: #0f0;">${charStats.influence || 0}%</span></div>
-                    <div><span style="color: #888;">Neural Activity:</span> <span style="color: ${charStats.active ? '#0f0' : '#f00'};">${charStats.active ? 'Active' : 'Idle'}</span></div>
-                    <div><span style="color: #888;">Last Active:</span> <span style="color: #0f0;">${formatTime(charStats.lastActive)}</span></div>
-                </div>
-            `;
-            modal.classList.add('active');
-        };
+        // Auto-generate messages
+        async function generateMessage() {
+            if (isGenerating) return;
+            isGenerating = true;
 
-        window.hideStats = function() {
-            document.getElementById('statsModal').classList.remove('active');
-        };
+            try {
+                // Get last 10 messages for context
+                const recentMessages = allMessages.slice(-10);
+                
+                // Randomly select a character
+                const characterKeys = Object.keys(characters);
+                const selectedChar = characterKeys[Math.floor(Math.random() * characterKeys.length)];
 
-        window.updateStatsPosition = function(e) {
-            const modal = document.getElementById('statsModal');
-            modal.style.left = `${e.clientX + 15}px`;
-            modal.style.top = `${e.clientY + 15}px`;
-        };
+                // Call Vercel API
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        character: selectedChar,
+                        recentMessages: recentMessages
+                    })
+                });
 
-        // Initial profile render
+                const data = await response.json();
+
+                if (data.success) {
+                    // Add message to Firebase
+                    await push(messagesRef, {
+                        char: selectedChar,
+                        text: data.message,
+                        timestamp: Date.now()
+                    });
+                }
+            } catch (error) {
+                console.error('Error generating message:', error);
+            } finally {
+                isGenerating = false;
+            }
+        }
+
+        function startAutoGeneration() {
+            // Generate a message every 60 seconds
+            setInterval(() => {
+                generateMessage();
+            }, 60000);
+
+            // Generate first message after 5 seconds
+            setTimeout(() => {
+                generateMessage();
+            }, 5000);
+        }
+
+        // Make functions global
+        window.showStats = showStats;
+        window.hideStats = hideStats;
+        window.updateStatsPosition = updateStatsPosition;
+
+        // Initial render
         renderProfiles();
     </script>
 </body>
