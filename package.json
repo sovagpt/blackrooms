@@ -1,0 +1,9 @@
+{
+  "name": "hood-backrooms",
+  "version": "1.0.0",
+  "description": "Hood Backrooms - AI conversation stream",
+  "type": "module",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.30.0"
+  }
+}
