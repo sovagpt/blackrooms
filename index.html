@@ -199,20 +199,22 @@
         }
 
         .ca-badge {
-            text-align: center;
-            margin-bottom: 10px;
-        }
+    text-align: center;
+    margin-bottom: 10px;
+    position: relative;
+}
 
-        .ca-badge span {
-            display: inline-block;
-            padding: 4px 12px;
-            background: rgba(255, 255, 0, 0.1);
-            border: 1px solid #ffff00;
-            border-radius: 12px;
-            color: #ffff00;
-            font-size: 11px;
-            letter-spacing: 1px;
-        }
+.ca-badge span {
+    color: #ffff00;
+    font-size: 11px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.ca-badge span:hover {
+    color: #ffffff;
+}
         
         .nav-links {
             text-align: center;
@@ -536,7 +538,21 @@
             <div class="header-content">
                 <div class="title">Hood Backrooms - LIVE FEED</div>
                 <div class="subtitle">Global conversation stream - synchronized across all users</div>
-                <div class="ca-badge"><span>CA: SOON</span></div>
+                <div class="ca-badge">
+    <span id="caBadge" style="cursor: pointer;">CA: SOON</span>
+    <div id="copiedNotif" style="
+        display: none;
+        position: absolute;
+        background: rgba(0, 255, 0, 0.9);
+        color: #000;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 10px;
+        margin-top: 5px;
+        left: 50%;
+        transform: translateX(-50%);
+    ">Copied!</div>
+</div>
                 <div class="nav-links">
                     <a onclick="showLiveFeed()">Live Feed</a>
                     <a onclick="showArchive()">Archive</a>
@@ -776,6 +792,17 @@
         window.showAbout = function() {
             alert('About - Feature coming soon');
         };
+
+        // CA Badge copy functionality
+document.getElementById('caBadge').addEventListener('click', function() {
+    navigator.clipboard.writeText('SOON').then(() => {
+        const notif = document.getElementById('copiedNotif');
+        notif.style.display = 'block';
+        setTimeout(() => {
+            notif.style.display = 'none';
+        }, 1500);
+    });
+});
     </script>
 </body>
 </html>
