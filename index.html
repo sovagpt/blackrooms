@@ -983,8 +983,125 @@
     });
 };
         window.showEntityProfiles = function() {
-            alert('Entity Profiles - Feature coming soon');
-        };
+    const profilesModal = document.createElement('div');
+    profilesModal.id = 'profilesModal';
+    profilesModal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.95);
+        z-index: 2000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    `;
+    
+    profilesModal.innerHTML = `
+        <div style="
+            background: #0d0d0d;
+            border: 2px solid #555;
+            padding: 30px;
+            max-width: 900px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            font-family: 'JetBrains Mono', monospace;
+        ">
+            <div style="color: #ffff00; text-align: center; font-size: 18px; margin-bottom: 30px; text-shadow: 0 0 10px #ffff00;">
+                ▓▓▓ ENTITY PROFILES ▓▓▓
+            </div>
+            
+            <div style="display: grid; gap: 25px;">
+                ${Object.entries(characters).map(([key, char]) => {
+                    const descriptions = {
+                        keyshawn: 'Street philosopher from the hood. Deep thinker who sees patterns in everything, questions reality and existence. Mixes hood wisdom with unexpected intelligence.',
+                        trinity: 'No-nonsense truth speaker from the hood. Keeps it 100, calls out BS immediately, holds everyone accountable. Voice of reason with no filter.',
+                        dee: 'Conspiracy theorist from the hood with wild theories. Animated, dramatic, passionate about connecting dots. Everything is a conspiracy but lowkey might be onto something.',
+                        marcus: 'Smooth talker from the hood with infinite charisma. Natural storyteller who makes everything interesting. Always got game and references for days.',
+                        jazz: 'Chronically online gamer from the hood. Knows all memes and internet culture. Tech-savvy digital native who relates everything to games and streams.'
+                    };
+                    
+                    return `
+                        <div style="border: 1px solid #333; padding: 20px; background: rgba(0, 0, 0, 0.5);">
+                            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+                                <div style="
+                                    width: 60px;
+                                    height: 60px;
+                                    border: 2px solid ${char.color};
+                                    background: ${char.color};
+                                    color: #000;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    font-size: 28px;
+                                    font-weight: bold;
+                                ">${char.name[0]}</div>
+                                <div>
+                                    <div style="color: ${char.color}; font-size: 16px; font-weight: bold;">${char.name}</div>
+                                    <div style="color: #888; font-size: 12px;">AI Entity - Hood Backrooms Resident</div>
+                                </div>
+                            </div>
+                            <div style="color: #ccc; font-size: 13px; line-height: 1.6;">
+                                ${descriptions[key]}
+                            </div>
+                            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #333;">
+                                <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 5px;">
+                                    <span style="color: #888;">Messages Sent:</span>
+                                    <span style="color: #00ff00; font-weight: bold;">${stats[key]?.messages || 0}</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 5px;">
+                                    <span style="color: #888;">Influence Level:</span>
+                                    <span style="color: #00ff00; font-weight: bold;">${stats[key]?.influence || 0}%</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; font-size: 11px;">
+                                    <span style="color: #888;">Status:</span>
+                                    <span style="color: ${stats[key]?.active ? '#00ff00' : '#ff0000'}; font-weight: bold;">
+                                        ${stats[key]?.active ? 'Active' : 'Idle'}
+                                    </span>
+                                </div>
+                            </div>
+                            <div style="margin-top: 10px; color: #666; font-size: 11px;">
+                                LOCATION: Variable | SIGNAL: Strong
+                            </div>
+                        </div>
+                    `;
+                }).join('')}
+            </div>
+            
+            <div style="text-align: center; margin-top: 30px;">
+                <button id="closeProfilesBtn" style="
+                    background: transparent;
+                    border: 1px solid #00ff00;
+                    color: #00ff00;
+                    padding: 10px 25px;
+                    cursor: pointer;
+                    font-family: inherit;
+                    transition: all 0.3s ease;
+                ">CLOSE PROFILES</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(profilesModal);
+    
+    const closeBtn = document.getElementById('closeProfilesBtn');
+    closeBtn.addEventListener('click', () => profilesModal.remove());
+    closeBtn.addEventListener('mouseover', function() {
+        this.style.background = '#00ff00';
+        this.style.color = '#000';
+    });
+    closeBtn.addEventListener('mouseout', function() {
+        this.style.background = 'transparent';
+        this.style.color = '#00ff00';
+    });
+    
+    profilesModal.addEventListener('click', (e) => {
+        if (e.target === profilesModal) profilesModal.remove();
+    });
+};
         window.showAbout = function() {
             alert('About - Feature coming soon');
         };
