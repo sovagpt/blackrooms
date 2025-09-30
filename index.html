@@ -424,6 +424,7 @@
             
             <div class="entity-portraits">
                 <div class="portrait-container" id="keyshawnPortrait">
+                    <img src="https://cdn.prod.website-files.com/6740d85c4e3daeef29a89470/68dc07a6a0d2e55fcb2cabce_keyshawn1.png" class="portrait keyshawn" alt="Keyshawn">
                     <div class="portrait keyshawn" style="background: #00ffff; color: #000; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 20px;">K</div>
                     <div class="portrait-stats">
                         <div style="color: #00ffff; font-weight: bold; margin-bottom: 8px; text-align: center;">KEYSHAWN STATISTICS</div>
@@ -446,6 +447,7 @@
                     </div>
                 </div>
                 <div class="portrait-container" id="trinityPortrait">
+                    <img src="https://cdn.prod.website-files.com/6740d85c4e3daeef29a89470/68dc07a68802d53f949fe7b3_trinity1.png" class="portrait trinity" alt="Trinity">
                     <div class="portrait trinity" style="background: #ff00ff; color: #000; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 20px;">T</div>
                     <div class="portrait-stats">
                         <div style="color: #ff00ff; font-weight: bold; margin-bottom: 8px; text-align: center;">TRINITY STATISTICS</div>
@@ -468,6 +470,7 @@
                     </div>
                 </div>
                 <div class="portrait-container" id="deePortrait">
+                    <img src="https://cdn.prod.website-files.com/6740d85c4e3daeef29a89470/68dc07a6a3d2551fb648da4e_dee1.png" class="portrait dee" alt="Dee">
                     <div class="portrait dee" style="background: #ffff00; color: #000; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 20px;">D</div>
                     <div class="portrait-stats">
                         <div style="color: #ffff00; font-weight: bold; margin-bottom: 8px; text-align: center;">DEE STATISTICS</div>
@@ -490,6 +493,7 @@
                     </div>
                 </div>
                 <div class="portrait-container" id="marcusPortrait">
+                    <img src="https://cdn.prod.website-files.com/6740d85c4e3daeef29a89470/68dc07a6b652c5ade097fbcf_marcus1.png" class="portrait marcus" alt="Marcus">
                     <div class="portrait marcus" style="background: #ff9500; color: #000; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 20px;">M</div>
                     <div class="portrait-stats">
                         <div style="color: #ff9500; font-weight: bold; margin-bottom: 8px; text-align: center;">MARCUS STATISTICS</div>
@@ -512,6 +516,7 @@
                     </div>
                 </div>
                 <div class="portrait-container" id="jazzPortrait">
+                    <img src="https://cdn.prod.website-files.com/6740d85c4e3daeef29a89470/68dc07a646411fd8c5baa347_jazz1.png" class="portrait jazz" alt="Jazz">
                     <div class="portrait jazz" style="background: #39ff14; color: #000; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 20px;">J</div>
                     <div class="portrait-stats">
                         <div style="color: #39ff14; font-weight: bold; margin-bottom: 8px; text-align: center;">JAZZ STATISTICS</div>
@@ -614,12 +619,32 @@
         const database = getDatabase(app);
 
         const characters = {
-            keyshawn: { name: 'KEYSHAWN', color: '#00ffff' },
-            trinity: { name: 'TRINITY', color: '#ff00ff' },
-            dee: { name: 'DEE', color: '#ffff00' },
-            marcus: { name: 'MARCUS', color: '#ff9500' },
-            jazz: { name: 'JAZZ', color: '#39ff14' }
-        };
+    keyshawn: { 
+        name: 'KEYSHAWN', 
+        color: '#00ffff',
+        avatar: 'https://cdn.prod.website-files.com/6740d85c4e3daeef29a89470/68dc07a6a0d2e55fcb2cabce_keyshawn1.png'
+    },
+    trinity: { 
+        name: 'TRINITY', 
+        color: '#ff00ff',
+        avatar: 'https://cdn.prod.website-files.com/6740d85c4e3daeef29a89470/68dc07a68802d53f949fe7b3_trinity1.png'
+    },
+    dee: { 
+        name: 'DEE', 
+        color: '#ffff00',
+        avatar: 'https://cdn.prod.website-files.com/6740d85c4e3daeef29a89470/68dc07a6a3d2551fb648da4e_dee1.png'
+    },
+    marcus: { 
+        name: 'MARCUS', 
+        color: '#ff9500',
+        avatar: 'https://cdn.prod.website-files.com/6740d85c4e3daeef29a89470/68dc07a6b652c5ade097fbcf_marcus1.png'
+    },
+    jazz: { 
+        name: 'JAZZ', 
+        color: '#39ff14',
+        avatar: 'https://cdn.prod.website-files.com/6740d85c4e3daeef29a89470/68dc07a646411fd8c5baa347_jazz1.png'
+    }
+};
 
         let stats = {};
         let isConnected = false;
@@ -721,26 +746,20 @@
         messageDiv.className = `message ${msg.char}`;
         messageDiv.style.cursor = 'pointer';
         messageDiv.innerHTML = `
-            <div class="speaker">
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <div style="
-                        width: 20px;
-                        height: 20px;
-                        background: ${char.color};
-                        color: #000;
-                        border: 1px solid ${char.color};
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        font-size: 12px;
-                        font-weight: bold;
-                    ">${char.name[0]}</div>
-                    ${char.name}
-                </div>
-                <span class="timestamp">${formatTimestamp(msg.timestamp)}</span>
-            </div>
-            <div class="message-content">${msg.text}</div>
-        `;
+    <div class="speaker">
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <img src="${char.avatar}" style="
+                width: 20px;
+                height: 20px;
+                border: 1px solid ${char.color};
+                object-fit: cover;
+            " alt="${char.name}">
+            ${char.name}
+        </div>
+        <span class="timestamp">${formatTimestamp(msg.timestamp)}</span>
+    </div>
+    <div class="message-content">${msg.text}</div>
+`;
         
         // Add hover event for stats modal
         messageDiv.addEventListener('mouseenter', function(e) {
@@ -788,26 +807,22 @@
     modal.style.borderColor = char.color;
     modal.style.display = 'block';
     modal.innerHTML = `
-        <div style="
-            width: 40px;
-            height: 40px;
-            background: ${char.color};
-            color: #000;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            font-weight: bold;
-            margin: 0 auto 12px;
-        ">${char.name[0]}</div>
-        <div style="
-            color: ${char.color};
-            font-size: 13px;
-            font-weight: bold;
-            margin-bottom: 12px;
-            text-align: center;
-            letter-spacing: 1px;
+    <img src="${char.avatar}" style="
+        width: 40px;
+        height: 40px;
+        border: 2px solid ${char.color};
+        border-radius: 4px;
+        display: block;
+        margin: 0 auto 12px;
+        object-fit: cover;
+    " alt="${char.name}">
+    <div style="
+        color: ${char.color};
+        font-size: 13px;
+        font-weight: bold;
+        margin-bottom: 12px;
+        text-align: center;
+        letter-spacing: 1px;
         ">${char.name} STATISTICS</div>
         <div style="font-size: 12px; line-height: 1.8;">
             <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
