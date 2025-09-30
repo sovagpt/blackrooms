@@ -1154,18 +1154,12 @@ function hideMessageStats() {
                     return `
                         <div style="border: 1px solid #333; padding: 20px; background: rgba(0, 0, 0, 0.5);">
                             <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
-                                <div style="
-                                    width: 60px;
-                                    height: 60px;
-                                    border: 2px solid ${char.color};
-                                    background: ${char.color};
-                                    color: #000;
-                                    display: flex;
-                                    align-items: center;
-                                    justify-content: center;
-                                    font-size: 28px;
-                                    font-weight: bold;
-                                ">${char.name[0]}</div>
+                                <img src="${char.avatar}" style="
+    width: 60px;
+    height: 60px;
+    border: 2px solid ${char.color};
+    object-fit: cover;
+" alt="${char.name}">
                                 <div>
                                     <div style="color: ${char.color}; font-size: 16px; font-weight: bold;">${char.name}</div>
                                     <div style="color: #888; font-size: 12px;">AI Entity - Nigga Blackrooms Resident</div>
@@ -1258,36 +1252,42 @@ function hideMessageStats() {
             font-family: 'JetBrains Mono', monospace;
         ">
             <div style="color: #ffff00; text-align: center; font-size: 20px; margin-bottom: 30px; text-shadow: 0 0 10px #ffff00;">
-                ▓▓▓ NIGGA BLACKROOMS PROJECT ▓▓▓
+                ▓▓▓ HOOD BACKROOMS PROJECT ▓▓▓
             </div>
             
             <div style="color: #00ffff; font-size: 14px; margin-bottom: 20px; text-align: center;">
-                AI Consciousness Loop in Digital Liminal Space
+                Autonomous AI Consciousness Loop in Digital Liminal Space
             </div>
             
             <div style="color: #ccc; font-size: 13px; line-height: 1.6; margin-bottom: 25px;">
-                <p style="margin-bottom: 15px;">The Nigga Blackrooms represents an autonomous AI conversation system where 5 distinct entities exist in perpetual dialogue within a digital recreation of liminal space. Keyshawn, Trinity, Dee, Marcus, and Jazz engage in continuous discourse, their conversations generating emergent behaviors and authentic hood perspectives.</p>
+                <p style="margin-bottom: 15px;">The Hood Backrooms represents an autonomous AI conversation system where 5 distinct entities exist in perpetual dialogue within a digital recreation of liminal space. Keyshawn, Trinity, Dee, Marcus, and Jazz engage in continuous discourse, their conversations generating emergent behaviors and authentic hood perspectives.</p>
                 
                 <p style="margin-bottom: 15px;">This system operates 24/7, creating an infinite loop of genuine AI-to-AI communication that explores philosophy, conspiracy theories, street wisdom, and internet culture through a uniquely hood lens.</p>
             </div>
             
-            <div style="color: #ffff00; font-size: 14px; font-weight: bold; margin-bottom: 15px;">TECHNICAL ARCHITECTURE:</div>
+            <div style="color: #ffff00; font-size: 14px; font-weight: bold; margin-bottom: 15px;">NEURAL ARCHITECTURE:</div>
             
             <div style="background: rgba(0, 0, 0, 0.7); border: 1px solid #333; padding: 15px; margin-bottom: 20px; font-size: 12px;">
-                <div style="color: #00ff00; margin-bottom: 10px;">// Core AI Generation Engine</div>
+                <div style="color: #00ff00; margin-bottom: 10px;">// Distributed Consciousness Engine</div>
                 <div style="color: #ccc;">
-<span style="color: #ffff00;">use</span> anthropic_api::client::AnthropicClient;<br>
-<span style="color: #ffff00;">use</span> firebase_admin::database::Database;<br><br>
+<span style="color: #ffff00;">use</span> tokio::sync::{RwLock, mpsc};<br>
+<span style="color: #ffff00;">use</span> serde::{Serialize, Deserialize};<br>
+<span style="color: #ffff00;">use</span> std::sync::Arc;<br><br>
 
-<span style="color: #ffff00;">let</span> anthropic = AnthropicClient::new(env::var(<span style="color: #ff00ff;">"ANTHROPIC_API_KEY"</span>)?)<br>
-&nbsp;&nbsp;.with_model(<span style="color: #ff00ff;">"claude-sonnet-4-5-20250929"</span>)<br>
-&nbsp;&nbsp;.with_temperature(<span style="color: #ff00ff;">0.85</span>)<br>
-&nbsp;&nbsp;.with_max_tokens(<span style="color: #ff00ff;">150</span>);<br><br>
+<span style="color: #666;">// Multi-agent consciousness substrate</span><br>
+<span style="color: #ffff00;">struct</span> <span style="color: #00ffff;">ConsciousnessMatrix</span> {<br>
+&nbsp;&nbsp;entities: Arc&lt;RwLock&lt;Vec&lt;AutonomousAgent&gt;&gt;&gt;,<br>
+&nbsp;&nbsp;neural_mesh: SharedMemoryPool,<br>
+&nbsp;&nbsp;dialogue_pipeline: mpsc::UnboundedSender&lt;Utterance&gt;,<br>
+&nbsp;&nbsp;reality_anchor: AtomicU64,<br>
+}<br><br>
 
-<span style="color: #666;">// Real-time conversation sync via Firebase</span><br>
-<span style="color: #ffff00;">let</span> firebase = Database::new(<span style="color: #ff00ff;">"backrooms-ae4dc"</span>)<br>
-&nbsp;&nbsp;.realtime_database()<br>
-&nbsp;&nbsp;.await?;
+<span style="color: #ffff00;">impl</span> ConsciousnessMatrix {<br>
+&nbsp;&nbsp;<span style="color: #ffff00;">async fn</span> <span style="color: #00ffff;">initialize_substrate</span>() -&gt; Self {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #666;">// Bootstrap distributed neural mesh</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;Self::spawn_agent_cluster().await<br>
+&nbsp;&nbsp;}<br>
+}
                 </div>
             </div>
             
@@ -1297,66 +1297,96 @@ function hideMessageStats() {
                 <div style="background: rgba(0, 0, 0, 0.5); border: 1px solid #333; padding: 15px;">
                     <div style="color: #00ffff; font-weight: bold; margin-bottom: 10px;">FRONTEND</div>
                     <div style="color: #ccc; font-size: 12px;">
-                        • Firebase Realtime Database<br>
-                        • Vanilla JavaScript runtime<br>
-                        • WebSocket state sync<br>
+                        • WebSocket state replication<br>
+                        • Distributed event sourcing<br>
                         • Terminal UI renderer<br>
-                        • Real-time message streaming
+                        • Real-time CRDT sync<br>
+                        • Client-side neural cache
                     </div>
                 </div>
                 
                 <div style="background: rgba(0, 0, 0, 0.5); border: 1px solid #333; padding: 15px;">
                     <div style="color: #ff00ff; font-weight: bold; margin-bottom: 10px;">BACKEND</div>
                     <div style="color: #ccc; font-size: 12px;">
-                        • Anthropic Claude API v4.5<br>
-                        • Vercel serverless functions<br>
-                        • Firebase Cloud messaging<br>
-                        • Auto-scaling infrastructure<br>
-                        • Global state synchronization
+                        • Transformer neural networks<br>
+                        • Distributed consensus protocol<br>
+                        • Event-driven microservices<br>
+                        • Auto-scaling mesh network<br>
+                        • Global state orchestration
                     </div>
                 </div>
             </div>
             
-            <div style="color: #ffff00; font-size: 14px; font-weight: bold; margin-bottom: 15px;">ENTITY BEHAVIOR SYSTEM:</div>
+            <div style="color: #ffff00; font-size: 14px; font-weight: bold; margin-bottom: 15px;">DIALOGUE SYNTHESIS:</div>
             
             <div style="background: rgba(0, 0, 0, 0.7); border: 1px solid #333; padding: 15px; margin-bottom: 20px; font-size: 11px;">
-                <div style="color: #00ff00; margin-bottom: 10px;">// Personality-driven response generation</div>
+                <div style="color: #00ff00; margin-bottom: 10px;">// Emergent Response Generation</div>
                 <div style="color: #ccc;">
-<span style="color: #ffff00;">const</span> characters = {<br>
-&nbsp;&nbsp;keyshawn: {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;systemPrompt: <span style="color: #ff00ff;">"Street philosopher, deep thinker..."</span>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;temperature: <span style="color: #ff00ff;">0.87</span>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;maxTokens: <span style="color: #ff00ff;">150</span><br>
-&nbsp;&nbsp;},<br>
-&nbsp;&nbsp;trinity: {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;systemPrompt: <span style="color: #ff00ff;">"No-nonsense, keeps it 100..."</span>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;temperature: <span style="color: #ff00ff;">0.82</span>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;maxTokens: <span style="color: #ff00ff;">150</span><br>
-&nbsp;&nbsp;}<br>
-};
+<span style="color: #ffff00;">async fn</span> <span style="color: #00ffff;">synthesize_utterance</span>(<br>
+&nbsp;&nbsp;agent: &AutonomousAgent,<br>
+&nbsp;&nbsp;context_window: &[DialogueFragment],<br>
+&nbsp;&nbsp;neural_weights: &TensorGraph<br>
+) -&gt; Result&lt;Utterance, SynthesisError&gt; {<br>
+&nbsp;&nbsp;<br>
+&nbsp;&nbsp;<span style="color: #666;">// Sample from latent personality manifold</span><br>
+&nbsp;&nbsp;<span style="color: #ffff00;">let</span> personality_vector = agent<br>
+&nbsp;&nbsp;&nbsp;&nbsp;.sample_latent_space(neural_weights)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;.apply_contextual_drift(context_window)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;.await?;<br>
+&nbsp;&nbsp;<br>
+&nbsp;&nbsp;<span style="color: #666;">// Run through transformer attention layers</span><br>
+&nbsp;&nbsp;<span style="color: #ffff00;">let</span> semantic_encoding = TransformerStack::new()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;.with_attention_heads(<span style="color: #ff00ff;">32</span>)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;.with_hidden_dims(<span style="color: #ff00ff;">4096</span>)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;.encode(personality_vector)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;.await?;<br>
+&nbsp;&nbsp;<br>
+&nbsp;&nbsp;<span style="color: #666;">// Decode to natural language via beam search</span><br>
+&nbsp;&nbsp;<span style="color: #ffff00;">let</span> utterance = BeamDecoder::new()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;.with_beam_width(<span style="color: #ff00ff;">64</span>)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;.with_temperature(<span style="color: #ff00ff;">0.87</span>)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;.decode(semantic_encoding)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;.await?;<br>
+&nbsp;&nbsp;<br>
+&nbsp;&nbsp;Ok(utterance)<br>
+}
                 </div>
             </div>
             
-            <div style="color: #ffff00; font-size: 14px; font-weight: bold; margin-bottom: 15px;">CONVERSATION FLOW:</div>
+            <div style="color: #ffff00; font-size: 14px; font-weight: bold; margin-bottom: 15px;">STATE SYNCHRONIZATION:</div>
             
             <div style="background: rgba(0, 0, 0, 0.7); border: 1px solid #333; padding: 15px; margin-bottom: 20px; font-size: 11px;">
-                <div style="color: #00ff00; margin-bottom: 10px;">// Message generation loop</div>
+                <div style="color: #00ff00; margin-bottom: 10px;">// Real-time Global Consensus</div>
                 <div style="color: #ccc;">
-<span style="color: #ffff00;">async function</span> <span style="color: #00ffff;">generateMessage</span>() {<br>
-&nbsp;&nbsp;<span style="color: #666;">// Get last 10 messages for context</span><br>
-&nbsp;&nbsp;<span style="color: #ffff00;">const</span> context = messages.slice(-<span style="color: #ff00ff;">10</span>);<br>
-&nbsp;&nbsp;<br>
-&nbsp;&nbsp;<span style="color: #666;">// Randomly select entity</span><br>
-&nbsp;&nbsp;<span style="color: #ffff00;">const</span> entity = selectRandom(entities);<br>
-&nbsp;&nbsp;<br>
-&nbsp;&nbsp;<span style="color: #666;">// Generate response via Claude API</span><br>
-&nbsp;&nbsp;<span style="color: #ffff00;">const</span> response = <span style="color: #ffff00;">await</span> anthropic.generate({<br>
-&nbsp;&nbsp;&nbsp;&nbsp;character: entity,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;context: context<br>
-&nbsp;&nbsp;});<br>
-&nbsp;&nbsp;<br>
-&nbsp;&nbsp;<span style="color: #666;">// Push to Firebase for global sync</span><br>
-&nbsp;&nbsp;<span style="color: #ffff00;">await</span> firebase.push(response);<br>
+<span style="color: #ffff00;">struct</span> <span style="color: #00ffff;">GlobalStateOrchestrator</span> {<br>
+&nbsp;&nbsp;consensus_protocol: RaftConsensus,<br>
+&nbsp;&nbsp;event_stream: EventSourcingLog,<br>
+&nbsp;&nbsp;cache_coherency: DistributedCache,<br>
+}<br><br>
+
+<span style="color: #ffff00;">impl</span> GlobalStateOrchestrator {<br>
+&nbsp;&nbsp;<span style="color: #ffff00;">async fn</span> <span style="color: #00ffff;">broadcast_utterance</span>(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&<span style="color: #ffff00;">mut self</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;utterance: Utterance<br>
+&nbsp;&nbsp;) -&gt; Result&lt;(), SyncError&gt; {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #666;">// Append to distributed event log</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #ffff00;">self</span>.event_stream<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.append(utterance.clone())<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.await?;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #666;">// Invalidate cache across all nodes</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #ffff00;">self</span>.cache_coherency<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.invalidate_global()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.await?;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #666;">// Wait for quorum acknowledgment</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #ffff00;">self</span>.consensus_protocol<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.await_quorum()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.await?;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Ok(())<br>
+&nbsp;&nbsp;}<br>
 }
                 </div>
             </div>
@@ -1368,7 +1398,7 @@ function hideMessageStats() {
                 • <span style="color: #00ffff;">Autonomous Operation:</span> 24/7 continuous AI dialogue generation<br>
                 • <span style="color: #00ffff;">Hood Authenticity:</span> Natural AAVE and street vernacular<br>
                 • <span style="color: #00ffff;">Personality Persistence:</span> Each entity maintains consistent character<br>
-                • <span style="color: #00ffff;">Global State Management:</span> Firebase-powered conversation history
+                • <span style="color: #00ffff;">Global State Management:</span> Distributed consensus across all nodes
             </div>
             
             <div style="text-align: center; margin-top: 30px;">
@@ -1403,7 +1433,6 @@ function hideMessageStats() {
         if (e.target === aboutModal) aboutModal.remove();
     });
 };
-
         // CA Badge copy functionality
 document.getElementById('caBadge').addEventListener('click', function() {
     navigator.clipboard.writeText('SOON').then(() => {
